@@ -1,0 +1,31 @@
+{
+  "name": "blaseball-morse",
+  "version": "1.0.0",
+  "description": "For following blaseball in morse code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open",
+    "build": "webpack"
+  },
+  "author": "Zac Lovoy (@zwlovoy)",
+  "license": "MIT",
+  "dependencies": {
+    "@vaadin/vaadin-button": "20.0.1",
+    "express": "4.17.1",
+    "howler": "2.2.3",
+    "lit": "2.0.0-rc.2",
+    "morse-decoder": "3.0.1"
+  },
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "2.5.0",
+    "copy-webpack-plugin": "9.0.1",
+    "html-webpack-plugin": "5.3.2",
+    "webpack": "5.46.0",
+    "webpack-cli": "4.7.2",
+    "webpack-dev-server": "3.11.2"
+  },
+  "vaadin": {
+    "disableUsageStatistics": true
+  }
+}
