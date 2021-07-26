@@ -10,6 +10,10 @@
     "prod": "webpack --mode=production",
     "dev": "webpack serve --open --mode=development"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zozman/blaseball-buzz.git"
+  },
   "author": "Zac Lovoy (@zwlovoy)",
   "license": "MIT",
   "dependencies": {
