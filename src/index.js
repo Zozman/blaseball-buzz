@@ -19,19 +19,42 @@ class MainApp extends LitElement {
       .content {
         display: flex;
         flex-direction: column;
+        margin-left: 15px;
+        margin-right: 15px;
       }
       .currentMessage {
         color: white;
         font-family: "Lora", "Courier New", monospace, serif;
+      }
+      .currentEmoji {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .teamSelector {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+      }
+      .teamSelectorButton {
+        margin-bottom: 30px;
+      }
+      .emojiHolder {
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 30px;
+      }
+      .transmittingMessage {
+        margin-top: 20px;
+        margin-bottom: 10px;
       }
     `;
   }
 
   static get properties() {
     return {
-      _isTransmitting: {
-        type: Boolean,
-      },
       _morse: {
         type: Object,
       },
@@ -47,12 +70,18 @@ class MainApp extends LitElement {
       _currentAudio: {
         type: Object,
       },
+      _teamList: {
+        type: Array,
+      },
+      _currentTeam: {
+        type: Object,
+      },
     };
   }
 
   constructor() {
     super();
-    this._isTransmitting = false;
+    this._currentTeam = null;
     this._currentMessage = "Awaiting Transmission...";
     this._eventList = [];
     this._morse = require("morse-decoder");
@@ -62,13 +91,32 @@ class MainApp extends LitElement {
     this._stream = new EventSource(streamUrl);
     this._stream.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
-      const games = data?.value?.games?.schedule;
-      if (games) {
-        const randomGame = games[Math.floor(Math.random() * games.length)];
-        const gameUpdate = randomGame.lastUpdate;
-        if (this._isTransmitting && gameUpdate) {
-          this._eventList = [...this._eventList, gameUpdate];
+      if (!this._teamList) {
+        const schedule = data?.value?.games?.schedule;
+        this._teamList =
+          schedule && schedule.length
+            ? schedule.map((item) => {
+                // We do it by away team since home team data has a weird mix of hex and non-hex values for whatever reason
+                return {
+                  id: item.awayTeam,
+                  emoji: item.awayTeamEmoji,
+                  color: item.awayTeamColor,
+                };
+              })
+            : null;
+      }
+      if (this._currentTeam) {
+        const games = data?.value?.games?.schedule;
+        if (games) {
+          const chosenGame = games.find(
+            (game) =>
+              game.homeTeam === this._currentTeam ||
+              game.awayTeam === this._currentTeam
+          );
+          const gameUpdate = chosenGame ? chosenGame.lastUpdate : null;
+          if (gameUpdate) {
+            this._eventList = [...this._eventList, gameUpdate];
+          }
         }
       }
     });
@@ -82,7 +130,7 @@ class MainApp extends LitElement {
   }
 
   checkEvents() {
-    if (!this._currentAudio && this._isTransmitting) {
+    if (!this._currentAudio && this._currentTeam) {
       this.transmitNextItem();
     }
   }
@@ -108,12 +156,12 @@ class MainApp extends LitElement {
     }
   }
 
-  startTransmitting() {
-    this._isTransmitting = true;
+  startTransmitting(team) {
+    this._currentTeam = team;
   }
 
   stopTransmitting() {
-    this._isTransmitting = false;
+    this._currentTeam = null;
     this._eventList = [];
     this._currentMessage = "Awaiting Transmission...";
     if (this._currentAudio && this._currentAudio.stop) {
@@ -123,9 +171,22 @@ class MainApp extends LitElement {
   }
 
   renderIsTransmitting() {
-    this._morse.audio("Wind Wings Up To Bat");
+    const currentTeam = this._teamList.find(
+      (team) => team.id === this._currentTeam
+    );
+    const currentEmoji = String.fromCodePoint(currentTeam.emoji);
     return html`
-      <div class="currentMessage">${this._currentMessage}</div>
+      <div class="currentEmoji">
+        <div
+          class="emojiHolder"
+          style="background-color: ${currentTeam.color};"
+        >
+          ${currentEmoji}
+        </div>
+      </div>
+      <div class="currentMessage transmittingMessage">
+        ${this._currentMessage}
+      </div>
       <vaadin-button
         @click="${() => this.stopTransmitting()}"
         aria-label="Stop Transmitting"
@@ -136,21 +197,44 @@ class MainApp extends LitElement {
 
   renderNotTransmitting() {
     return html`
-      <vaadin-button
-        @click="${() => this.startTransmitting()}"
-        aria-label="Start Transmitting"
-        >Start Transmitting
-      </vaadin-button>
+      <div class="teamSelector">
+        ${this._teamList.map((team) => {
+          const emoji = String.fromCodePoint(team.emoji);
+          return html`
+            <vaadin-button
+              @click="${() => this.startTransmitting(team.id)}"
+              aria-label="Transmit Team ${team.id}"
+              class="teamSelectorButton"
+              ><div
+                class="emojiHolder"
+                style="background-color: ${team.color};"
+              >
+                ${emoji}
+              </div>
+            </vaadin-button>
+          `;
+        })}
+      </div>
     `;
+  }
+
+  renderHasNotInitialized() {
+    return html`<div class="currentMessage">Awaiting Data...</div>`;
+  }
+
+  renderHasInitialized() {
+    return this._currentTeam
+      ? this.renderIsTransmitting()
+      : this.renderNotTransmitting();
   }
 
   render() {
     return html`
       <div class="app">
         <div class="content">
-          ${this._isTransmitting
-            ? this.renderIsTransmitting()
-            : this.renderNotTransmitting()}
+          ${this._teamList
+            ? this.renderHasInitialized()
+            : this.renderHasNotInitialized()}
         </div>
       </div>
     `;
