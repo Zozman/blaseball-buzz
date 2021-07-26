@@ -6,6 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="edge" />
     <meta name="theme-color" content="#000000">
     <meta charset="utf-8" />
+    <link rel="canonical" href="<%= htmlWebpackPlugin.options.url %>" />
+    <!-- Search Engine -->
+    <meta name="description" content="A web app for transmitting Blaseball games using Morse Code." />
+    <!-- Schema.org for Google -->
+    <meta itemprop="name" content="YarpBot" />
+    <meta itemprop="description"
+        content="A web app for transmitting Blaseball games using Morse Code." />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Blaseball Buzz" />
+    <meta name="twitter:description"
+        content="A web app for transmitting Blaseball games using Morse Code." />
+    <meta name="twitter:image" content="<%= htmlWebpackPlugin.options.url %>/<%=require('./images/icon.svg').default%>" />
+    <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+    <meta property="og:title" content="Blaseball Buzz" />
+    <meta property="og:description"
+        content="A web app for transmitting Blaseball games using Morse Code." />
+    <meta property="og:url" content="<%= htmlWebpackPlugin.options.url %>" />
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.url %>/<%=require('./images/icon.svg').default%>" />
+    <meta property="og:site_name" content="Blaseball Buzz" />
+    <meta property="og:type" content="website" />
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link
         href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&amp;family=Open+Sans:wght@400;700&amp;display=swap"

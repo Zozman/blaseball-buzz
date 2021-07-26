@@ -1,6 +1,6 @@
 <div align="center">
 
-![Icon](images/icon.svg)
+![Icon](src/images/icon.svg)
 
 </div>
 

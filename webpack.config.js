@@ -6,6 +6,10 @@ const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = (env, argv) => {
+  let url = "https://blaseball.buzz";
+  if (argv.mode === "development") {
+    url = "http://localhost:8080";
+  }
   return {
     mode: argv.mode,
     entry: {
@@ -15,6 +19,21 @@ module.exports = (env, argv) => {
       splitChunks: {
         chunks: "all",
       },
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(png|svg|jpg|gif|ico)$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "assets/[name].[contenthash].[ext]",
+              },
+            },
+          ],
+        },
+      ],
     },
     devtool: argv.mode === "development" ? "inline-source-map" : false,
     devServer: {
@@ -34,10 +53,11 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new FaviconsWebpackPlugin(path.resolve(__dirname, "images/icon.svg")),
+      new FaviconsWebpackPlugin(path.resolve(__dirname, "src/images/icon.svg")),
       new HtmlWebpackPlugin({
         hash: true,
         title: "Blaseball Buzz",
+        url,
         template: "./src/index.html",
       }),
       new CopyWebpackPlugin({
