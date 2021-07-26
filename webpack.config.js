@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = (env, argv) => {
   return {
@@ -8,7 +10,12 @@ module.exports = (env, argv) => {
     entry: {
       index: "./src/index.js",
     },
-    devtool: "inline-source-map",
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+      },
+    },
+    devtool: argv.mode === "development" ? "inline-source-map" : false,
     devServer: {
       contentBase: "./dist",
       index: "index.html",
@@ -25,6 +32,7 @@ module.exports = (env, argv) => {
       },
     },
     plugins: [
+      new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         hash: true,
         title: "Blaseball Morse",
@@ -39,9 +47,17 @@ module.exports = (env, argv) => {
           },
         ],
       }),
+      new CompressionPlugin({
+        filename: "[path][base].gz",
+        algorithm: "gzip",
+      }),
+      new CompressionPlugin({
+        filename: "[path][base].br",
+        algorithm: "brotliCompress",
+      }),
     ],
     output: {
-      filename: "[name].bundle.js",
+      filename: "[name].[contenthash].bundle.js",
       path: path.resolve(__dirname, "dist"),
       clean: true,
     },

@@ -8,19 +8,22 @@
     "start": "webpack --mode=production && node index.js",
     "build": "webpack",
     "prod": "webpack --mode=production",
-    "dev": "webpack serve --open"
+    "dev": "webpack serve --open --mode=development"
   },
   "author": "Zac Lovoy (@zwlovoy)",
   "license": "MIT",
   "dependencies": {
     "@vaadin/vaadin-button": "20.0.1",
     "express": "4.17.1",
+    "express-static-gzip": "2.1.1",
     "howler": "2.2.3",
     "lit": "2.0.0-rc.2",
     "morse-decoder": "3.0.1"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "2.5.0",
+    "clean-webpack-plugin": "4.0.0-alpha.0",
+    "compression-webpack-plugin": "8.0.1",
     "copy-webpack-plugin": "9.0.1",
     "html-webpack-plugin": "5.3.2",
     "webpack": "5.46.0",
