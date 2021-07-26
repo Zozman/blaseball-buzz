@@ -37,7 +37,7 @@ module.exports = (env, argv) => {
       new FaviconsWebpackPlugin(path.resolve(__dirname, "images/icon.svg")),
       new HtmlWebpackPlugin({
         hash: true,
-        title: "Blaseball Morse",
+        title: "Blaseball Buzz",
         template: "./src/index.html",
       }),
       new CopyWebpackPlugin({

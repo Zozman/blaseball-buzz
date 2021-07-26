@@ -1,5 +1,5 @@
 {
-  "name": "blaseball-morse",
+  "name": "blaseball-buzz",
   "version": "1.0.0",
   "description": "For following blaseball in morse code.",
   "main": "index.js",
