@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "webpack --mode=production && node index.js",
     "build": "webpack",
+    "prod": "webpack --mode=production",
     "dev": "webpack serve --open"
   },
   "author": "Zac Lovoy (@zwlovoy)",

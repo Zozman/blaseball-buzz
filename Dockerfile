@@ -6,7 +6,7 @@ RUN apt-get update && apt-get -y install dumb-init && apt-get autoremove -y && a
 COPY package.json ./
 RUN npm install
 COPY . .
-# Have Webpack build the UI
-RUN npm run build
+# Have Webpack build the UI in production mode
+RUN npm run prod
 # Start the server
 CMD [ "dumb-init", "node", "index.js" ]
