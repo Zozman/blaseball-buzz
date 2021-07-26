@@ -9,7 +9,7 @@
     "build": "webpack --mode:production",
     "build:dev": "webpack",
     "dev": "webpack serve --open --mode=development",
-    "start:express": "webpack --mode=production && node index.js"
+    "start:express": "webpack --mode:production && node index.js"
   },
   "repository": {
     "type": "git",
