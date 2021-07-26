@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open",
-    "build": "webpack"
+    "start": "node index.js",
+    "build": "webpack",
+    "dev": "webpack serve --open"
   },
   "author": "Zac Lovoy (@zwlovoy)",
   "license": "MIT",
