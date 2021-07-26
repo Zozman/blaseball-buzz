@@ -12,6 +12,16 @@ module.exports = {
     contentBase: "./dist",
     index: "index.html",
     hot: true,
+    proxy: {
+      "/settings": {
+        bypass: (req, res) =>
+          res.send({
+            EventStream:
+              // "https://before.sibr.dev/events/streamData",
+              "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
+          }),
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

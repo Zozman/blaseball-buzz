@@ -22,9 +22,18 @@ class MainApp extends LitElement {
         margin-left: 15px;
         margin-right: 15px;
       }
+      .awaitingMessage {
+        color: white;
+        font-family: "Lora", "Courier New", monospace, serif;
+        justify-content: center;
+        font-size: 5vw;
+      }
       .currentMessage {
         color: white;
         font-family: "Lora", "Courier New", monospace, serif;
+        justify-content: center;
+        font-size: 3vw;
+        text-align: center;
       }
       .currentEmoji {
         margin-left: auto;
@@ -33,7 +42,6 @@ class MainApp extends LitElement {
       .teamSelector {
         flex: 1;
         display: flex;
-        flex-wrap: wrap;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
@@ -45,10 +53,31 @@ class MainApp extends LitElement {
         padding: 5px;
         border-radius: 50%;
         font-size: 30px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
       }
       .transmittingMessage {
         margin-top: 20px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+      }
+      .blaseballButton {
+        font-size: 1rem;
+        border: 1px solid #fff;
+        font-family: "Open Sans", "Helvetica Neue", sans-serif;
+        color: #fff;
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
+        width: 150px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .blaseballButton:hover {
+        opacity: 0.8;
+      }
+      .blaseballCancelButton {
+        background-color: #ad0900;
       }
     `;
   }
@@ -82,28 +111,49 @@ class MainApp extends LitElement {
   constructor() {
     super();
     this._currentTeam = null;
-    this._currentMessage = "Awaiting Transmission...";
+    this._currentMessage = "Awaiting Feedback...";
     this._eventList = [];
     this._morse = require("morse-decoder");
-    // const streamUrl = 'https://before.sibr.dev/events/streamData';
-    const startTime = "2021-07-01T01:00:08.17Z";
-    const streamUrl = "https://api.sibr.dev/replay/v1/replay?from=" + startTime;
-    this._stream = new EventSource(streamUrl);
+    this.getSettings();
+  }
+
+  update(changedProperties) {
+    super.update(changedProperties);
+    if (changedProperties.has("_eventList")) {
+      this.checkEvents();
+    }
+  }
+
+  getSettings() {
+    fetch("/settings")
+      .then((e) => e.json())
+      .then((response) => {
+        if (response && response.EventStream) {
+          this.buildEventStream(response.EventStream);
+        } else {
+          throw new Exception("Unable To Get Settings; Trying Again");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        this.getSettings();
+      });
+  }
+
+  buildEventStream(eventStream) {
+    this._stream = new EventSource(eventStream);
     this._stream.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       if (!this._teamList) {
-        const schedule = data?.value?.games?.schedule;
-        this._teamList =
-          schedule && schedule.length
-            ? schedule.map((item) => {
-                // We do it by away team since home team data has a weird mix of hex and non-hex values for whatever reason
-                return {
-                  id: item.awayTeam,
-                  emoji: item.awayTeamEmoji,
-                  color: item.awayTeamColor,
-                };
-              })
-            : null;
+        const divisions = data?.value?.leagues?.divisions || [];
+        let activeTeams = [];
+        divisions.forEach((division) => {
+          activeTeams = activeTeams.concat(division.teams);
+        });
+        const teams = data?.value?.leagues?.teams || [];
+        this._teamList = teams.filter(
+          (team) => activeTeams.indexOf(team.id) !== -1
+        );
       }
       if (this._currentTeam) {
         const games = data?.value?.games?.schedule;
@@ -120,13 +170,6 @@ class MainApp extends LitElement {
         }
       }
     });
-  }
-
-  update(changedProperties) {
-    super.update(changedProperties);
-    if (changedProperties.has("_eventList")) {
-      this.checkEvents();
-    }
   }
 
   checkEvents() {
@@ -163,7 +206,7 @@ class MainApp extends LitElement {
   stopTransmitting() {
     this._currentTeam = null;
     this._eventList = [];
-    this._currentMessage = "Awaiting Transmission...";
+    this._currentMessage = "Awaiting Feedback...";
     if (this._currentAudio && this._currentAudio.stop) {
       this._currentAudio.stop();
     }
@@ -174,12 +217,14 @@ class MainApp extends LitElement {
     const currentTeam = this._teamList.find(
       (team) => team.id === this._currentTeam
     );
-    const currentEmoji = String.fromCodePoint(currentTeam.emoji);
+    const currentEmoji = currentTeam.emoji.startsWith("0x")
+      ? String.fromCodePoint(currentTeam.emoji)
+      : currentTeam.emoji;
     return html`
       <div class="currentEmoji">
         <div
           class="emojiHolder"
-          style="background-color: ${currentTeam.color};"
+          style="background-color: ${currentTeam.mainColor};"
         >
           ${currentEmoji}
         </div>
@@ -188,9 +233,10 @@ class MainApp extends LitElement {
         ${this._currentMessage}
       </div>
       <vaadin-button
+        class="blaseballButton blaseballCancelButton"
         @click="${() => this.stopTransmitting()}"
-        aria-label="Stop Transmitting"
-        >Stop Transmitting
+        aria-label="Stop Receiving"
+        >Stop Receiving
       </vaadin-button>
     `;
   }
@@ -199,7 +245,9 @@ class MainApp extends LitElement {
     return html`
       <div class="teamSelector">
         ${this._teamList.map((team) => {
-          const emoji = String.fromCodePoint(team.emoji);
+          const emoji = team.emoji.startsWith("0x")
+            ? String.fromCodePoint(team.emoji)
+            : team.emoji;
           return html`
             <vaadin-button
               @click="${() => this.startTransmitting(team.id)}"
@@ -207,7 +255,7 @@ class MainApp extends LitElement {
               class="teamSelectorButton"
               ><div
                 class="emojiHolder"
-                style="background-color: ${team.color};"
+                style="background-color: ${team.mainColor};"
               >
                 ${emoji}
               </div>
@@ -219,7 +267,7 @@ class MainApp extends LitElement {
   }
 
   renderHasNotInitialized() {
-    return html`<div class="currentMessage">Awaiting Data...</div>`;
+    return html`<div class="awaitingMessage">Awaiting Feedback...</div>`;
   }
 
   renderHasInitialized() {
