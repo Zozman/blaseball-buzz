@@ -16,6 +16,7 @@
     "@vaadin/vaadin-button": "20.0.1",
     "express": "4.17.1",
     "express-static-gzip": "2.1.1",
+    "helmet": "4.6.0",
     "howler": "2.2.3",
     "lit": "2.0.0-rc.2",
     "morse-decoder": "3.0.1"

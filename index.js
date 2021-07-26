@@ -1,7 +1,21 @@
 const express = require("express");
+const helmet = require("helmet");
 const path = require("path");
 const expressStaticGzip = require("express-static-gzip");
 const app = express();
+
+// Apply basic express security
+// We're skipping the CSP since the EVENT_STREAM could be from anywhere
+app.use(helmet.dnsPrefetchControl());
+app.use(helmet.expectCt());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
+app.use(helmet.hsts());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.referrerPolicy());
+app.use(helmet.xssFilter());
 
 // Do this to serve our static assets and use the minified files
 app.use(
