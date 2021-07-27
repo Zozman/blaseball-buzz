@@ -1,6 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { Howl } from "howler";
 import "@vaadin/vaadin-button";
+import { library, icon } from "@fortawesome/fontawesome-svg-core";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+library.add(faGithub);
 
 class MainApp extends LitElement {
   static get styles() {
@@ -88,8 +91,6 @@ class MainApp extends LitElement {
         width: 100%;
         font-family: "Lora", "Courier New", monospace, serif;
         color: white;
-        padding-left: 10px;
-        padding-right: 10px;
         padding-botton: 10px;
         display: flex;
         justify-content: space-between;
@@ -109,6 +110,10 @@ class MainApp extends LitElement {
         cursor: pointer;
         transition: all 1s;
       }
+      .footerText svg {
+        width: 20px;
+        height: 20px;
+      }
       .footerText:hover {
         color: #a16dc3;
         text-shadow: 0 0 10px #a16dc3;
@@ -117,12 +122,21 @@ class MainApp extends LitElement {
       footer a {
         color: inherit;
       }
+      .footerLeft {
+        padding-left: 10px;
+      }
+      .footerRight {
+        padding-right: 10px;
+      }
       @media only screen and (max-width: 1100px) {
         footer {
           justify-content: center;
         }
         .currentMessage {
           font-size: 8vw;
+        }
+        .footerRight {
+          margin-left: 10px;
         }
       }
     `;
@@ -369,6 +383,7 @@ class MainApp extends LitElement {
   }
 
   render() {
+    const githubIcon = icon({ prefix: "fab", iconName: "github" }).node;
     return html`
       <div class="app">
         <div class="content">
@@ -378,9 +393,14 @@ class MainApp extends LitElement {
         </div>
       </div>
       <footer>
-        <div class="footerText">
+        <div class="footerText footerLeft">
           Cobbled Together By Zoz (aka
           <a target="_blank" href="https://twitter.com/zwlovoy">@zwlovoy</a>)
+        </div>
+        <div class="footerText footerRight">
+          <a target="_blank" href="https://github.com/Zozman/blaseball-buzz"
+            >${githubIcon}</a
+          >
         </div>
       </footer>
     `;

@@ -7,6 +7,6 @@ COPY package.json ./
 RUN npm install
 COPY . .
 # Have Webpack build the UI in production mode
-RUN npm run prod
+RUN npm run build
 # Start the server
 CMD [ "dumb-init", "node", "index.js" ]

@@ -9,7 +9,7 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack",
     "dev": "webpack serve --open --mode=development",
-    "start:express": "webpack --mode=production && node index.js"
+    "local": "webpack --mode=production && node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,8 @@
   "author": "Zac Lovoy (@zwlovoy)",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.35",
+    "@fortawesome/free-brands-svg-icons": "5.15.3",
     "@vaadin/vaadin-button": "20.0.1",
     "express": "4.17.1",
     "express-static-gzip": "2.1.1",

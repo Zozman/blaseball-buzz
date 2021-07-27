@@ -32,7 +32,7 @@ npm install
 Then start the application:
 
 ```
-npm start
+npm run local
 ```
 
 ### Run Using Docker
