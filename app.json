@@ -6,7 +6,7 @@
   "logo": "https://raw.githubusercontent.com/Zozman/blaseball-buzz/master/src/images/icon.svg",
   "env": {
     "EVENT_STREAM": {
-        "description": "The Event Steam the application will subscribe to. Defaults to https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z.",
+        "description": "The Event Steam the application will subscribe to. Defaults to https://cors-proxy.blaseball-reference.com/events/streamData.",
         "required": false
     },
     "PORT": {

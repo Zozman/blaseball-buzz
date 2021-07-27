@@ -19,7 +19,7 @@ A web app for transmitting [Blaseball](https://blaseball.com) games using [Morse
 ## Enviromental Variables
 
 - `PORT`: What port the web server will run on. Defaults to `8080`.
-- `EVENT_STREAM`: The Event Steam the application will subscribe to. Defaults to `https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z`.
+- `EVENT_STREAM`: The Event Steam the application will subscribe to. Defaults to `https://cors-proxy.blaseball-reference.com/events/streamData`.
 
 ## Running
 

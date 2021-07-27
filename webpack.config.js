@@ -45,8 +45,8 @@ module.exports = (env, argv) => {
           bypass: (req, res) =>
             res.send({
               EventStream:
-                // "https://before.sibr.dev/events/streamData",
-                "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
+                // "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
+                "https://cors-proxy.blaseball-reference.com/events/streamData",
             }),
         },
       },
