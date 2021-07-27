@@ -1,3 +1,4 @@
+# Workflow to test docker builds and publish to GitHub Container Registry when committing to master
 name: CI
 
 on:
