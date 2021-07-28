@@ -344,10 +344,11 @@ class MainApp extends LitElement {
   buildEventStream(eventStream) {
     // Build the _stream object
     this._stream = new EventSource(eventStream);
-    this._stream.addEventListener("error", (event) => {
+    // Commenting this notification out for now because it's finicky
+    /* this._stream.addEventListener("error", (event) => {
       console.error(`An error occured on Event Steam ${eventStream}`);
       this.showNotification(`An error occured on Event Steam ${eventStream}`);
-    });
+    }); */
     this._stream.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       // If we have not prepaired the _teamList then we need to do that first
