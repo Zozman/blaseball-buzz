@@ -24,6 +24,8 @@
     "@polymer/paper-dialog": "3.0.1",
     "@polymer/paper-slider": "3.0.1",
     "@vaadin/vaadin-button": "20.0.1",
+    "@vaadin/vaadin-notification": "20.0.1",
+    "@vaadin/vaadin-text-field": "20.0.1",
     "express": "4.17.1",
     "express-static-gzip": "2.1.1",
     "helmet": "4.6.0",

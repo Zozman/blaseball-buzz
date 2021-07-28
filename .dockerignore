@@ -9,3 +9,5 @@ app.json
 .slugignore
 LICENSE.md
 README.md
+.jsbeautifyrc
+.prettierrc

@@ -1,6 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { Howl, Howler } from "howler";
 import "@vaadin/vaadin-button";
+import "@vaadin/vaadin-text-field";
+import "@vaadin/vaadin-notification";
 import "@polymer/paper-dialog/paper-dialog.js";
 import "@polymer/paper-slider/paper-slider.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
@@ -172,6 +174,9 @@ class MainApp extends LitElement {
         width: 100%;
         font-family: "Lora", "Courier New", monospace, serif;
       }
+      .settingSubheaderWithSpacer {
+        margin-top: 20px;
+      }
       .saveSettingsButton {
         margin-top: 20px;
       }
@@ -215,6 +220,13 @@ class MainApp extends LitElement {
       }
       .footerRight {
         padding-right: 10px;
+      }
+      .textBox {
+        --lumo-body-text-color: #fff;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        font-family: "Open Sans", "Helvetica Neue", sans-serif;
+        font-weight: 400;
       }
       @media only screen and (max-width: 1100px) {
         footer {
@@ -260,19 +272,41 @@ class MainApp extends LitElement {
       _currentTeam: {
         type: Object,
       },
+      // The current Event Stream we are reading from
+      _eventStream: {
+        type: String,
+      },
     };
   }
 
   constructor() {
     super();
+    // Initialize the morse object
+    this._morse = require("morse-decoder");
+    this.resetApp();
+  }
+
+  resetApp(eventStreamInput) {
     // Reset the app
+    if (this._stream && this._stream.close) {
+      this._stream.close();
+    }
+    this._stream = null;
+    this._teamList = null;
     this._currentTeam = null;
     this._currentMessage = "Awaiting Feedback...";
     this._eventList = [];
-    // Initialize the morse object
-    this._morse = require("morse-decoder");
-    // Get the settings so we can load the app
-    this.getSettings();
+    // If there's audio playing then stop it
+    if (this._currentAudio && this._currentAudio.stop) {
+      this._currentAudio.stop();
+    }
+    if (eventStreamInput) {
+      // If we got an event stream then get straight to building the stream
+      this.buildEventStream(eventStreamInput);
+      // Else get the default stream from settings
+    } else {
+      this.getSettings();
+    }
   }
 
   // Function that runs on a property update
@@ -293,6 +327,7 @@ class MainApp extends LitElement {
       .then((response) => {
         // If we got an EventStream then continue initializing the app
         if (response && response.EventStream) {
+          this._eventStream = response.EventStream;
           this.buildEventStream(response.EventStream);
         } else {
           throw new Exception("Unable To Get Settings; Trying Again");
@@ -309,6 +344,10 @@ class MainApp extends LitElement {
   buildEventStream(eventStream) {
     // Build the _stream object
     this._stream = new EventSource(eventStream);
+    this._stream.addEventListener("error", (event) => {
+      console.error(`An error occured on Event Steam ${eventStream}`);
+      this.showNotification(`An error occured on Event Steam ${eventStream}`);
+    });
     this._stream.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       // If we have not prepaired the _teamList then we need to do that first
@@ -349,6 +388,17 @@ class MainApp extends LitElement {
   checkEvents() {
     if (!this._currentAudio && this._currentTeam) {
       this.transmitNextItem();
+    }
+  }
+
+  // Function to show a notification at the top of the screen
+  showNotification(text) {
+    const notification = this.shadowRoot.getElementById("notification");
+    if (notification) {
+      notification.renderer = (root) => {
+        root.textContent = text;
+      };
+      notification.open();
     }
   }
 
@@ -415,14 +465,26 @@ class MainApp extends LitElement {
     const volume = this.shadowRoot.getElementById("volumeSlider").value;
     // Set it here so that it affects all sounds played after the save
     Howler.volume(volume);
+    // Now see if the Event Stream changed and if we need to rebuild the app with a new one
+    const settingsEventStream = this.shadowRoot.getElementById(
+      "settingsEventStream"
+    ).value;
+    // If we have a new Event Stream we need to reset everything
+    if (settingsEventStream && settingsEventStream !== this._eventStream) {
+      this._eventStream = settingsEventStream;
+      this.resetApp(this._eventStream);
+    }
     this.closeSettings();
   }
 
   // Function to make sure the slider is synced to the real volume
-  onSettingsModalClose(e) {
+  onSettingsModalChange(e) {
     // Get the volume from Howler and set it to the slider
     const volume = Howler.volume();
     this.shadowRoot.getElementById("volumeSlider").value = volume;
+    // Set the Event Stream URL correctly
+    this.shadowRoot.getElementById("settingsEventStream").value =
+      this._eventStream;
   }
 
   // Function to render the state where we are transmitting morse code
@@ -504,7 +566,7 @@ class MainApp extends LitElement {
         class="dialog"
         id="settingsDialog"
         with-backdrop
-        @opened-changed="${(e) => this.onSettingsModalClose(e)}"
+        @opened-changed="${(e) => this.onSettingsModalChange(e)}"
       >
         <div class="modalContent">
           <div
@@ -525,6 +587,15 @@ class MainApp extends LitElement {
             step="0.1"
           >
           </paper-slider>
+          <div class="settingsSubheader settingSubheaderWithSpacer">
+            Event Stream
+          </div>
+          <vaadin-text-field
+            placeholder="Event Stream URL"
+            class="textBox"
+            id="settingsEventStream"
+            value="${this._eventStream}"
+          ></vaadin-text-field>
           <vaadin-button
             class="blaseballButton blaseballConfirmButton saveSettingsButton"
             @click="${() => this.saveSettings()}"
@@ -541,6 +612,12 @@ class MainApp extends LitElement {
     const githubIcon = icon({ prefix: "fab", iconName: "github" }).node;
     const cogIcon = icon({ prefix: "fas", iconName: "cog" }).node;
     return html`
+      <vaadin-notification
+        class="notification"
+        id="notification"
+        duration="10000"
+        position="top-center"
+      ></vaadin-notification>
       <header>
         <div class="headerLeft"></div>
         <div class="headerRight">
@@ -551,7 +628,7 @@ class MainApp extends LitElement {
       </header>
       <div class="app">
         <div class="content">
-          ${this._teamList
+          ${this._teamList && this._teamList.length
             ? this.renderHasInitialized()
             : this.renderHasNotInitialized()}
         </div>
