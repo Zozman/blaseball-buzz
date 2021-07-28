@@ -1,8 +1,13 @@
 import { LitElement, html, css } from "lit";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 import "@vaadin/vaadin-button";
+import "@polymer/paper-dialog/paper-dialog.js";
+import "@polymer/paper-slider/paper-slider.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
+import { faCog, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+library.add(faCog);
+library.add(faTimes);
 library.add(faGithub);
 
 class MainApp extends LitElement {
@@ -80,12 +85,95 @@ class MainApp extends LitElement {
         width: 150px;
         margin-left: auto;
         margin-right: auto;
+        font-size: 1rem;
+        line-height: 1.5;
+        font-weight: 700;
       }
       .blaseballButton:hover {
         opacity: 0.8;
       }
       .blaseballCancelButton {
         background-color: #ad0900;
+      }
+      .blaseballConfirmButton {
+        background-color: #28a745;
+      }
+      header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+      .headerRight {
+        padding-right: 10px;
+        padding-top: 5px;
+      }
+      .dialog {
+        border-color: #fff;
+        background-color: #000;
+        border: 1px solid;
+        width: 500px;
+        max-width: 95%;
+        height: 750px;
+        max-height: 80vh;
+        color: #fff;
+      }
+      .modalContent {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+        margin-top: 0;
+      }
+      .closeModalButton {
+        color: #fff;
+        width: 20px;
+        align-self: flex-end;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid;
+        border-radius: 50%;
+        border-color: #000;
+        padding: 5px;
+      }
+      .closeModalButton svg {
+        width: 26px;
+        height: 36px;
+      }
+      .closeModalButton:hover {
+        border-color: #fff;
+      }
+      .closeModalButton:hover svg {
+        width: 26px;
+        height: 36px;
+      }
+      .volumeSlider {
+        width: 100%;
+        --paper-slider-knob-color: #fff;
+        --paper-slider-active-color: #fff;
+        --paper-slider-container-color: #1e1e1e;
+      }
+      .settingsTitle {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 400;
+        line-height: 1.5;
+        font-family: "Lora", "Courier New", monospace, serif;
+      }
+      .settingsSubheader {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #c4c4c4;
+        text-align: center;
+        width: 100%;
+        font-family: "Lora", "Courier New", monospace, serif;
+      }
+      .saveSettingsButton {
+        margin-top: 20px;
       }
       footer {
         width: 100%;
@@ -311,6 +399,32 @@ class MainApp extends LitElement {
     this._currentAudio = null;
   }
 
+  // Function to show the settings modal
+  showSettings() {
+    this.shadowRoot.getElementById("settingsDialog").open();
+  }
+
+  // Function to hide the settings modal
+  closeSettings() {
+    this.shadowRoot.getElementById("settingsDialog").close();
+  }
+
+  // Function to save the settings
+  saveSettings() {
+    // Get the volume from the slider
+    const volume = this.shadowRoot.getElementById("volumeSlider").value;
+    // Set it here so that it affects all sounds played after the save
+    Howler.volume(volume);
+    this.closeSettings();
+  }
+
+  // Function to make sure the slider is synced to the real volume
+  onSettingsModalClose(e) {
+    // Get the volume from Howler and set it to the slider
+    const volume = Howler.volume();
+    this.shadowRoot.getElementById("volumeSlider").value = volume;
+  }
+
   // Function to render the state where we are transmitting morse code
   renderIsTransmitting() {
     const currentTeam = this._teamList.find(
@@ -382,9 +496,59 @@ class MainApp extends LitElement {
       : this.renderNotTransmitting();
   }
 
+  // Function to render the settings modal
+  renderSettingsModal() {
+    const timesButton = icon({ prefix: "fas", iconName: "times" }).node;
+    return html`
+      <paper-dialog
+        class="dialog"
+        id="settingsDialog"
+        with-backdrop
+        @opened-changed="${(e) => this.onSettingsModalClose(e)}"
+      >
+        <div class="modalContent">
+          <div
+            class="closeModalButton"
+            @click="${() => this.closeSettings()}"
+            aria-label="Close Settings"
+          >
+            ${timesButton}
+          </div>
+          <div class="settingsTitle">Settings</div>
+          <div class="settingsSubheader">Volume</div>
+          <paper-slider
+            class="volumeSlider"
+            id="volumeSlider"
+            value="1"
+            min="0"
+            max="1"
+            step="0.1"
+          >
+          </paper-slider>
+          <vaadin-button
+            class="blaseballButton blaseballConfirmButton saveSettingsButton"
+            @click="${() => this.saveSettings()}"
+            aria-label="Save Changes"
+            >Save Changes
+          </vaadin-button>
+        </div>
+      </paper-dialog>
+    `;
+  }
+
+  // Main function to render the application
   render() {
     const githubIcon = icon({ prefix: "fab", iconName: "github" }).node;
+    const cogIcon = icon({ prefix: "fas", iconName: "cog" }).node;
     return html`
+      <header>
+        <div class="headerLeft"></div>
+        <div class="headerRight">
+          <span class="footerText" @click="${() => this.showSettings()}"
+            >${cogIcon}</span
+          >
+        </div>
+      </header>
       <div class="app">
         <div class="content">
           ${this._teamList
@@ -403,6 +567,7 @@ class MainApp extends LitElement {
           >
         </div>
       </footer>
+      ${this.renderSettingsModal()}
     `;
   }
 }
