@@ -2,7 +2,6 @@ import { LitElement, html, css } from "lit";
 import { Howl, Howler } from "howler";
 import "@vaadin/vaadin-button";
 import "@vaadin/vaadin-text-field";
-import "@vaadin/vaadin-notification";
 import "@polymer/paper-dialog/paper-dialog.js";
 import "@polymer/paper-slider/paper-slider.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
@@ -344,11 +343,6 @@ class MainApp extends LitElement {
   buildEventStream(eventStream) {
     // Build the _stream object
     this._stream = new EventSource(eventStream);
-    // Commenting this notification out for now because it's finicky
-    /* this._stream.addEventListener("error", (event) => {
-      console.error(`An error occured on Event Steam ${eventStream}`);
-      this.showNotification(`An error occured on Event Steam ${eventStream}`);
-    }); */
     this._stream.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       // If we have not prepaired the _teamList then we need to do that first
@@ -389,17 +383,6 @@ class MainApp extends LitElement {
   checkEvents() {
     if (!this._currentAudio && this._currentTeam) {
       this.transmitNextItem();
-    }
-  }
-
-  // Function to show a notification at the top of the screen
-  showNotification(text) {
-    const notification = this.shadowRoot.getElementById("notification");
-    if (notification) {
-      notification.renderer = (root) => {
-        root.textContent = text;
-      };
-      notification.open();
     }
   }
 
@@ -613,12 +596,6 @@ class MainApp extends LitElement {
     const githubIcon = icon({ prefix: "fab", iconName: "github" }).node;
     const cogIcon = icon({ prefix: "fas", iconName: "cog" }).node;
     return html`
-      <vaadin-notification
-        class="notification"
-        id="notification"
-        duration="10000"
-        position="top-center"
-      ></vaadin-notification>
       <header>
         <div class="headerLeft"></div>
         <div class="headerRight">
