@@ -175,6 +175,7 @@ class MainApp extends LitElement {
       }
       .settingSubheaderWithSpacer {
         margin-top: 20px;
+        margin-bottom: 20px;
       }
       .saveSettingsButton {
         margin-top: 20px;
