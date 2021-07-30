@@ -100,6 +100,7 @@ class MainApp extends LitElement {
         border-radius: 20px;
         padding: 5px 12px;
         text-decoration: none;
+        font-family: "Open Sans", "Helvetica Neue", sans-serif;
       }
       .blaseballNeutralButton:hover {
         border-color: #fff;
