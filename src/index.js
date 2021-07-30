@@ -7,12 +7,9 @@ import "@polymer/paper-slider/paper-slider.js";
 import "@spectrum-web-components/tooltip/sp-tooltip.js";
 import "@spectrum-web-components/overlay/overlay-trigger.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCog,
-  faTimes,
-  faQuestionCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCog, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 library.add(faCog);
 library.add(faTimes);
 library.add(faQuestionCircle);
@@ -599,7 +596,7 @@ class MainApp extends LitElement {
   renderSettingsModal() {
     const timesButton = icon({ prefix: "fas", iconName: "times" }).node;
     const questionIcon = icon({
-      prefix: "fas",
+      prefix: "far",
       iconName: "question-circle",
     }).node;
     return html`
