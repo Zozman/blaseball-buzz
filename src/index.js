@@ -93,6 +93,19 @@ class MainApp extends LitElement {
       .blaseballButton:hover {
         opacity: 0.8;
       }
+      .blaseballNeutralButton {
+        color: #c4c4c4;
+        font-size: 14px;
+        border: 1px solid transparent;
+        border-radius: 20px;
+        padding: 5px 12px;
+        text-decoration: none;
+      }
+      .blaseballNeutralButton:hover {
+        border-color: #fff;
+        color: #fff;
+        border: 1px solid;
+      }
       .blaseballCancelButton {
         background-color: #ad0900;
       }
@@ -227,6 +240,12 @@ class MainApp extends LitElement {
         border-radius: 4px;
         font-family: "Open Sans", "Helvetica Neue", sans-serif;
         font-weight: 400;
+      }
+      .settingsQuickFeedPickRow {
+        margin-top: 10px;
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
       }
       @media only screen and (max-width: 1100px) {
         footer {
@@ -472,6 +491,11 @@ class MainApp extends LitElement {
       this._eventStream;
   }
 
+  // Function to auto-fill the Event Stream box in settings with a value
+  settingsSetFeed(input) {
+    this.shadowRoot.getElementById("settingsEventStream").value = input;
+  }
+
   // Function to render the state where we are transmitting morse code
   renderIsTransmitting() {
     const currentTeam = this._teamList.find(
@@ -581,6 +605,26 @@ class MainApp extends LitElement {
             id="settingsEventStream"
             value="${this._eventStream}"
           ></vaadin-text-field>
+          <div class="settingsQuickFeedPickRow">
+            <vaadin-button
+              class="blaseballNeutralButton"
+              @click="${() =>
+                this.settingsSetFeed(
+                  "https://cors-proxy.blaseball-reference.com/events/streamData"
+                )}"
+              aria-label="ILB Feed"
+              >ILB Feed
+            </vaadin-button>
+            <vaadin-button
+              class="blaseballNeutralButton"
+              @click="${() =>
+                this.settingsSetFeed(
+                  "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z"
+                )}"
+              aria-label="SIBR Test Feed"
+              >SIBR Test Feed
+            </vaadin-button>
+          </div>
           <vaadin-button
             class="blaseballButton blaseballConfirmButton saveSettingsButton"
             @click="${() => this.saveSettings()}"
