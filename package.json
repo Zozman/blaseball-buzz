@@ -23,6 +23,8 @@
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@polymer/paper-dialog": "3.0.1",
     "@polymer/paper-slider": "3.0.1",
+    "@spectrum-web-components/overlay": "0.11.10",
+    "@spectrum-web-components/tooltip": "0.8.12",
     "@vaadin/vaadin-button": "20.0.1",
     "@vaadin/vaadin-text-field": "20.0.1",
     "express": "4.17.1",

@@ -4,11 +4,18 @@ import "@vaadin/vaadin-button";
 import "@vaadin/vaadin-text-field";
 import "@polymer/paper-dialog/paper-dialog.js";
 import "@polymer/paper-slider/paper-slider.js";
+import "@spectrum-web-components/tooltip/sp-tooltip.js";
+import "@spectrum-web-components/overlay/overlay-trigger.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
-import { faCog, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCog,
+  faTimes,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 library.add(faCog);
 library.add(faTimes);
+library.add(faQuestionCircle);
 library.add(faGithub);
 
 class MainApp extends LitElement {
@@ -186,6 +193,8 @@ class MainApp extends LitElement {
         text-align: center;
         width: 100%;
         font-family: "Lora", "Courier New", monospace, serif;
+        display: flex;
+        justify-content: center;
       }
       .settingSubheaderWithSpacer {
         margin-top: 20px;
@@ -247,6 +256,24 @@ class MainApp extends LitElement {
         display: flex;
         width: 100%;
         justify-content: space-evenly;
+      }
+      .questionHoverIcon {
+        color: #c4c4c4;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        align-self: center;
+        margin: 0px;
+        width: 18px;
+        height: 18px;
+        margin-left: 5px;
+      }
+      .questionHoverIcon:hover {
+        color: #fff;
+      }
+      .questionHoverOverlayTrigger {
+        display: flex;
+        vertical-align: middle;
       }
       @media only screen and (max-width: 1100px) {
         footer {
@@ -571,6 +598,10 @@ class MainApp extends LitElement {
   // Function to render the settings modal
   renderSettingsModal() {
     const timesButton = icon({ prefix: "fas", iconName: "times" }).node;
+    const questionIcon = icon({
+      prefix: "fas",
+      iconName: "question-circle",
+    }).node;
     return html`
       <paper-dialog
         class="dialog"
@@ -598,7 +629,23 @@ class MainApp extends LitElement {
           >
           </paper-slider>
           <div class="settingsSubheader settingSubheaderWithSpacer">
-            Event Stream
+            <span>Event Stream</span>
+            <overlay-trigger
+              class="questionHoverOverlayTrigger"
+              placement="bottom-start"
+            >
+              <span slot="trigger" class="questionHoverIcon"
+                >${questionIcon}</span
+              >
+              <sp-tooltip
+                class="blaseballTooltip"
+                slot="hover-content"
+                open
+                placement="bottom-start"
+                >Please ensure the URL is CORS compliant or else it will not
+                work.</sp-tooltip
+              >
+            </overlay-trigger>
           </div>
           <vaadin-text-field
             placeholder="Event Stream URL"
