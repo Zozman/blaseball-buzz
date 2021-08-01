@@ -9,6 +9,10 @@
         "description": "The Event Steam the application will subscribe to. Defaults to https://cors-proxy.blaseball-reference.com/events/streamData.",
         "required": false
     },
+    "SIESTA_MESSAGE": {
+      "description": "If set to a string, the application will display a Siesta attribute in the header with the message provided on hover of the Siesta Attribute. Useful for communicating when we're in the off-season and using a different EVENT_STREAM than the live one.",
+      "required": false
+    },
     "PORT": {
         "description": "Port to run the web server to display the instructions webpage.  Default value is 8080 (Heroku will set this automatically).",
         "required": false

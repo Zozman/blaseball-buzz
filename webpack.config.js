@@ -47,6 +47,9 @@ module.exports = (env, argv) => {
               EventStream:
                 // "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
                 "https://cors-proxy.blaseball-reference.com/events/streamData",
+              SiestaMessage:
+                // "Blaseball is in a Siesta.  Broadcasting historical data by default.",
+                null,
             }),
         },
       },

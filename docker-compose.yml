@@ -4,7 +4,8 @@ services:
     build: .
     environment:
       PORT: 8080
-      #EVENT_STREAM: https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.
       EVENT_STREAM: https://cors-proxy.blaseball-reference.com/events/streamData
+      #EVENT_STREAM: https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z
+      #SIESTA_MESSAGE: Blaseball is in a Siesta.  Broadcasting historical data by default.
     ports:
       - "8080:8080"

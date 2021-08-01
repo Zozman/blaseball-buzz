@@ -7,11 +7,12 @@ import "@polymer/paper-slider/paper-slider.js";
 import "@spectrum-web-components/tooltip/sp-tooltip.js";
 import "@spectrum-web-components/overlay/overlay-trigger.js";
 import { library, icon } from "@fortawesome/fontawesome-svg-core";
-import { faCog, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faTimes, faBed } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 library.add(faCog);
 library.add(faTimes);
+library.add(faBed);
 library.add(faQuestionCircle);
 library.add(faGithub);
 
@@ -268,9 +269,28 @@ class MainApp extends LitElement {
       .questionHoverIcon:hover {
         color: #fff;
       }
-      .questionHoverOverlayTrigger {
+      .overlayTrigger {
         display: flex;
         vertical-align: middle;
+      }
+      .attributeHolder {
+        margin-top: 5px;
+      }
+      .attribute {
+        display: flex;
+        margin: 0;
+        height: 32px;
+        width: 32px;
+        border-radius: 5px;
+        align-items: center;
+        font-size: 24px;
+        justify-content: center;
+        border: 2px solid rgb(219, 188, 11);
+        color: #fff;
+      }
+      .attribute svg {
+        height: 1em;
+        width: 1em;
       }
       @media only screen and (max-width: 1100px) {
         footer {
@@ -318,6 +338,10 @@ class MainApp extends LitElement {
       },
       // The current Event Stream we are reading from
       _eventStream: {
+        type: String,
+      },
+      // Optional message to show with a Siesta Attribute in the header
+      _siestaMessage: {
         type: String,
       },
     };
@@ -369,6 +393,10 @@ class MainApp extends LitElement {
     fetch("/settings")
       .then((e) => e.json())
       .then((response) => {
+        // If there's a Siesta Message then save it
+        if (response && response.SiestaMessage) {
+          this._siestaMessage = response.SiestaMessage;
+        }
         // If we got an EventStream then continue initializing the app
         if (response && response.EventStream) {
           this._eventStream = response.EventStream;
@@ -627,10 +655,7 @@ class MainApp extends LitElement {
           </paper-slider>
           <div class="settingsSubheader settingSubheaderWithSpacer">
             <span>Event Stream</span>
-            <overlay-trigger
-              class="questionHoverOverlayTrigger"
-              placement="bottom-start"
-            >
+            <overlay-trigger class="overlayTrigger" placement="bottom-start">
               <span slot="trigger" class="questionHoverIcon"
                 >${questionIcon}</span
               >
@@ -681,6 +706,23 @@ class MainApp extends LitElement {
     `;
   }
 
+  // Function to render the Siesta attribute and message (if there is one)
+  renderSiestaAttribute(message) {
+    const bedIcon = icon({ prefix: "fas", iconName: "bed" }).node;
+    return html`
+      <overlay-trigger class="overlayTrigger" placement="bottom-start">
+        <div slot="trigger" class="attribute">${bedIcon}</div>
+        <sp-tooltip
+          class="blaseballTooltip"
+          slot="hover-content"
+          open
+          placement="bottom-start"
+          >${message}</sp-tooltip
+        >
+      </overlay-trigger>
+    `;
+  }
+
   // Main function to render the application
   render() {
     const githubIcon = icon({ prefix: "fab", iconName: "github" }).node;
@@ -688,6 +730,13 @@ class MainApp extends LitElement {
     return html`
       <header>
         <div class="headerLeft"></div>
+        <div class="headerMiddle">
+          <div class="attributeHolder">
+            ${this._siestaMessage
+              ? this.renderSiestaAttribute(this._siestaMessage)
+              : null}
+          </div>
+        </div>
         <div class="headerRight">
           <span class="footerText" @click="${() => this.showSettings()}"
             >${cogIcon}</span
