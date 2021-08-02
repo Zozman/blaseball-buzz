@@ -28,6 +28,10 @@
     <meta property="og:site_name" content="Blaseball Buzz" />
     <meta property="og:type" content="website" />
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script>
+        // Used to tell the Paper Components we don't want to load this font
+        window.polymerSkipLoadingFontRoboto = true;
+    </script>
     <link
         href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&amp;family=Open+Sans:wght@400;700&amp;display=swap"
         rel="stylesheet">
