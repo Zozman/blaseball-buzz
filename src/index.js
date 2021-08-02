@@ -231,7 +231,6 @@ class MainApp extends LitElement {
       .footerText:hover {
         color: #a16dc3;
         text-shadow: 0 0 10px #a16dc3;
-        font-weight: 700;
       }
       footer a {
         color: inherit;
@@ -753,10 +752,20 @@ class MainApp extends LitElement {
       <footer>
         <div class="footerText footerLeft">
           Cobbled Together By Zoz (aka
-          <a target="_blank" href="https://twitter.com/zwlovoy">@zwlovoy</a>)
+          <a
+            target="_blank"
+            rel="noopener"
+            aria-label="Link to the @zwlovoy Twitter."
+            href="https://twitter.com/zwlovoy"
+            >@zwlovoy</a
+          >)
         </div>
         <div class="footerText footerRight">
-          <a target="_blank" href="https://github.com/Zozman/blaseball-buzz"
+          <a
+            target="_blank"
+            rel="noopener"
+            aria-label="Link to the GitHub repo for this project."
+            href="https://github.com/Zozman/blaseball-buzz"
             >${githubIcon}</a
           >
         </div>
