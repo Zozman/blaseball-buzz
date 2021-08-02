@@ -8,5 +8,7 @@ RUN npm install
 COPY . .
 # Have Webpack build the UI in production mode
 RUN npm run build
+# Prune the dev dependencies since we don't need them anymore
+RUN npm prune --production
 # Start the server
 CMD [ "dumb-init", "node", "index.js" ]
