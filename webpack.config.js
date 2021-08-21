@@ -37,16 +37,19 @@ module.exports = (env, argv) => {
     },
     devtool: argv.mode === "development" ? "inline-source-map" : false,
     devServer: {
-      contentBase: "./dist",
-      index: "index.html",
+      port: "auto",
+      host: "local-ip",
       hot: true,
+      devMiddleware: {
+        index: "index.html",
+      },
       proxy: {
         "/settings": {
           bypass: (req, res) =>
             res.send({
               EventStream:
-                // "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
-                "https://cors-proxy.blaseball-reference.com/events/streamData",
+                "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
+              // "https://cors-proxy.blaseball-reference.com/events/streamData",
               SiestaMessage:
                 // "Blaseball is in a Siesta.  Broadcasting historical data by default.",
                 null,
