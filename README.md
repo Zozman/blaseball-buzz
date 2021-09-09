@@ -9,6 +9,7 @@
 A web app for transmitting [Blaseball](https://blaseball.com) games using [Morse Code](https://en.wikipedia.org/wiki/Morse_code).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
 
 ## Features
 
