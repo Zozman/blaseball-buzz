@@ -27,7 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@polymer/paper-dialog": "3.0.1",
     "@polymer/paper-slider": "3.0.1",
-    "@spectrum-web-components/overlay": "0.11.14",
+    "@spectrum-web-components/overlay": "0.11.15",
     "@spectrum-web-components/tooltip": "0.8.16",
     "@vaadin/vaadin-button": "21.0.1",
     "@vaadin/vaadin-text-field": "21.0.1",
