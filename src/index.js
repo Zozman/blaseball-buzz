@@ -679,7 +679,7 @@ class MainApp extends LitElement {
               class="blaseballNeutralButton"
               @click="${() =>
                 this.settingsSetFeed(
-                  "https://cors-proxy.blaseball-reference.com/events/streamData"
+                  "https://api.sibr.dev/corsmechanics/api.blaseball.com/events/streamData"
                 )}"
               aria-label="ILB Feed"
               >ILB Feed

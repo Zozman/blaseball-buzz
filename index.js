@@ -35,7 +35,7 @@ app.get("/settings", (req, res) => {
     EventStream:
       process.env.EVENT_STREAM ||
       // "https://api.sibr.dev/replay/v1/replay?from=2021-07-01T01:00:08.17Z",
-      "https://cors-proxy.blaseball-reference.com/events/streamData",
+      "https://api.sibr.dev/corsmechanics/api.blaseball.com/events/streamData",
     SiestaMessage: process.env.SIESTA_MESSAGE || null,
   });
 });
