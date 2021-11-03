@@ -21,7 +21,7 @@ A web app for transmitting [Blaseball](https://blaseball.com) games using [Morse
 ## Enviromental Variables
 
 - `PORT`: What port the web server will run on. Defaults to `8080`.
-- `EVENT_STREAM`: The Event Steam the application will subscribe to. Defaults to `https://cors-proxy.blaseball-reference.com/events/streamData`.
+- `EVENT_STREAM`: The Event Steam the application will subscribe to. Defaults to `https://api.sibr.dev/corsmechanics/api.blaseball.com/events/streamData`.
 - `SIESTA_MESSAGE`: If set to a string, the application will display a Siesta attribute in the header with the message provided on hover of the Siesta Attribute. Useful for communicating when we're in the off-season and using a different `EVENT_STREAM` than the live one.
 
 ## Running
