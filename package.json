@@ -42,7 +42,7 @@
     "@webcomponents/webcomponentsjs": "2.6.0",
     "clean-webpack-plugin": "4.0.0",
     "compression-webpack-plugin": "9.1.1",
-    "copy-webpack-plugin": "10.0.0",
+    "copy-webpack-plugin": "10.1.0",
     "favicons": "6.2.2",
     "favicons-webpack-plugin": "5.0.2",
     "file-loader": "6.2.0",
