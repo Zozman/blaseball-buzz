@@ -28,7 +28,7 @@
     "@polymer/paper-dialog": "3.0.1",
     "@polymer/paper-slider": "3.0.1",
     "@spectrum-web-components/overlay": "0.15.3",
-    "@spectrum-web-components/tooltip": "0.10.9",
+    "@spectrum-web-components/tooltip": "0.10.10",
     "@vaadin/vaadin-button": "23.0.3",
     "@vaadin/vaadin-text-field": "23.0.3",
     "express": "4.17.3",
