@@ -44,7 +44,7 @@ jobs:
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@v3.1.0
+      - uses: actions/setup-node@v3.1.1
         name: Setup Node
         with:
           node-version: "15"
