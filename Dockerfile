@@ -1,10 +1,10 @@
-FROM node:16.13.1
+FROM node:18.0.0
 WORKDIR /usr/src/app
 # Install dumb-init to deal with Docker P1 issues
 RUN apt-get update && apt-get -y install dumb-init && apt-get autoremove -y && apt-get clean
 # Copy and install node packages so we cache them better
 COPY package.json ./
-RUN yarn install
+RUN npm install
 COPY . .
 # Have Webpack build the UI in production mode
 RUN npm run build
