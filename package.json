@@ -18,7 +18,7 @@
   "author": "Zac Lovoy (@zwlovoy)",
   "license": "MIT",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "6.1.1",
@@ -50,9 +50,6 @@
     "webpack": "5.72.0",
     "webpack-cli": "4.9.2",
     "webpack-dev-server": "4.8.1"
-  },
-  "resolutions": {
-    "colors": "1.4.0"
   },
   "vaadin": {
     "disableUsageStatistics": true
