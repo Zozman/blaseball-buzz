@@ -31,7 +31,7 @@
     "@spectrum-web-components/tooltip": "0.10.11",
     "@vaadin/vaadin-button": "23.0.7",
     "@vaadin/vaadin-text-field": "23.0.7",
-    "express": "4.18.0",
+    "express": "4.18.1",
     "express-static-gzip": "2.1.5",
     "helmet": "5.0.2",
     "howler": "2.2.3",
