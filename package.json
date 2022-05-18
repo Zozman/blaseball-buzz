@@ -33,7 +33,7 @@
     "@vaadin/vaadin-text-field": "23.0.10",
     "express": "4.18.1",
     "express-static-gzip": "2.1.7",
-    "helmet": "5.0.2",
+    "helmet": "5.1.0",
     "howler": "2.2.3",
     "lit": "2.2.4",
     "morse-decoder": "3.0.1"
