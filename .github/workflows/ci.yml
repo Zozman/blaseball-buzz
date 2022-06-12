@@ -75,7 +75,6 @@ jobs:
           registry: ghcr.io
           dockerfile: Dockerfile
           enableBuildKit: true
-          # Build for all available platforms
-          platform: ${{ steps.buildx.outputs.platforms }}
+          platform: linux/arm64,linux/amd64
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
