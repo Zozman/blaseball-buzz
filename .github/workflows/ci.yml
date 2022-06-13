@@ -70,14 +70,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
 
-      - uses: zozman/docker-build-push@useBuildxCommand
-        name: Build & push Docker image
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          image: blaseball-buzz
-          tags: ${{ steps.tag.outputs.new_tag }}, latest
           registry: ghcr.io
-          dockerfile: Dockerfile
-          useBuildxCommand: true
-          platform: linux/amd64,linux/arm64
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/zozman/blaseball-buzz:${{ steps.tag.outputs.new_tag }}
+            ghcr.io/zozman/blaseball-buzz:latest
+
+      #- uses: zozman/docker-build-push@useBuildxCommand
+      #  name: Build & push Docker image
+      #  with:
+      #    image: blaseball-buzz
+      #    tags: ${{ steps.tag.outputs.new_tag }}, latest
+      #    registry: ghcr.io
+      #    dockerfile: Dockerfile
+      #    useBuildxCommand: true
+      #    platform: linux/amd64,linux/arm64
+      #    username: ${{ github.actor }}
+      #    password: ${{ secrets.GITHUB_TOKEN }}
