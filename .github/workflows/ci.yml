@@ -67,14 +67,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
 
-      - uses: mr-smithers-excellent/docker-build-push@master
+      - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
           image: blaseball-buzz
           tags: ${{ steps.tag.outputs.new_tag }}, latest
           registry: ghcr.io
           dockerfile: Dockerfile
-          enableBuildKit: true
-          platform: linux/arm64,linux/amd64
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
