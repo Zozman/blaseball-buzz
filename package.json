@@ -35,7 +35,7 @@
     "express-static-gzip": "2.1.7",
     "helmet": "5.1.1",
     "howler": "2.2.3",
-    "lit": "2.2.8",
+    "lit": "2.3.0",
     "morse-decoder": "3.0.1"
   },
   "devDependencies": {
