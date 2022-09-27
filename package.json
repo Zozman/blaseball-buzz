@@ -29,7 +29,7 @@
     "@polymer/paper-slider": "3.0.1",
     "@spectrum-web-components/overlay": "0.18.3",
     "@spectrum-web-components/tooltip": "0.11.3",
-    "@vaadin/vaadin-button": "23.2.1",
+    "@vaadin/vaadin-button": "23.2.2",
     "@vaadin/vaadin-text-field": "23.2.1",
     "express": "4.18.1",
     "express-static-gzip": "2.1.7",
