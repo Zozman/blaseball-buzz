@@ -1,4 +1,4 @@
-FROM node:19.2.0
+FROM node:19.3.0
 WORKDIR /usr/src/app
 # Install dumb-init to deal with Docker P1 issues
 RUN apt-get update && apt-get -y install dumb-init && apt-get autoremove -y && apt-get clean
