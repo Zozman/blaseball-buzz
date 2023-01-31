@@ -30,7 +30,7 @@
     "@spectrum-web-components/overlay": "0.18.11",
     "@spectrum-web-components/tooltip": "0.11.11",
     "@vaadin/vaadin-button": "23.3.6",
-    "@vaadin/vaadin-text-field": "23.3.5",
+    "@vaadin/vaadin-text-field": "23.3.6",
     "express": "4.18.2",
     "express-static-gzip": "2.1.7",
     "helmet": "6.0.1",
