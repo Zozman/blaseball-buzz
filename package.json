@@ -39,7 +39,7 @@
     "morse-decoder": "3.0.1"
   },
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "2.7.0",
+    "@webcomponents/webcomponentsjs": "2.8.0",
     "clean-webpack-plugin": "4.0.0",
     "compression-webpack-plugin": "10.0.0",
     "copy-webpack-plugin": "11.0.0",
