@@ -1,6 +1,6 @@
 {
   "name": "blaseball-buzz",
-  "version": "1.0.419",
+  "version": "1.0.420",
   "description": "For following blaseball in morse code.",
   "main": "index.js",
   "scripts": {
